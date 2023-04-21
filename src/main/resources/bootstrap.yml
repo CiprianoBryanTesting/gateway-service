@@ -1,0 +1,30 @@
+server:
+  port: 8903
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8902/eureka/
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: student-service
+          uri: lb://student-service
+          predicates:
+            - Path=/student/**
+
+        - id: stats-service
+          uri: lb://stats-service
+          predicates:
+            - Path=/stats/**
+
+  sleuth:
+    sampler:
+      probability: 1.0
